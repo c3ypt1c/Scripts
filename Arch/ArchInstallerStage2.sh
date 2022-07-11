@@ -1,10 +1,7 @@
 #!/bin/bash
 
-# Set your vars here (and in the other file too)
-MACHINE_NAME="YourMachineNameHere"
-DISK1="/dev/nvme0n1p1"
-DISK2="/dev/nvme0n1p2"
-ADMIN_USER="YourUsernameHere"
+# Settings
+source Settings.sh
 
 # localisation (change this if you don't live in the uk) (timedatectl list-timezones | YOUR CAPITAL)
 echo "Upating Localisation"
@@ -49,14 +46,14 @@ sed -i "s/\#ParallelDownloads/ParallelDownloads/" /etc/pacman.conf
 
 # finalising install
 echo "Install and setup reflector"
-pacman -Syyu reflector
+pacman --noconfirm -Syyu reflector
 # change c flag to your contry code
 reflector -c GB --sort rate -a 10 -p https --save /etc/pacman.d/mirrorlist
-pacman -Syyy
+pacman --noconfirm -Syyy
 
 
 echo "Install most of the packages"
-pacman -S grub efibootmgr network-manager-applet dialog os-prober mtools dosfstools base-devel linux-headers git wget cups xdg-utils xdg-user-dirs
+pacman --noconfirm -S grub efibootmgr network-manager-applet dialog os-prober mtools dosfstools base-devel linux-headers git wget cups xdg-utils xdg-user-dirs pulseaudio pavucontrol
 
 
 # setting up grub

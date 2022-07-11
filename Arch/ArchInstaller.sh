@@ -3,12 +3,8 @@
 # This is a very simple install script. It's also very opinionated.
 # This script assumes that you have partitioned your disks. See start of this https://www.youtube.com/watch?v=kD3WC-93jEk
 
-# Set your vars here (and in the other file too)
-MACHINE_NAME="YourMachineNameHere"
-DISK1="/dev/nvme0n1p1"
-DISK2="/dev/nvme0n1p2"
-ADMIN_USER="YourUsernameHere"
-
+# get settings
+source Settings.sh
 
 echo "Setting up encryption"
 cryptsetup -y -v --type luks2 --iter-time 20000 --pbkdf argon2id luksFormat $DISK2
@@ -38,12 +34,6 @@ mount /dev/vg1/home /mnt/home
 mkdir /mnt/boot
 mount $DISK1 /mnt/boot
 
-
-# progress
-echo "=== Progress ==="
-lsblk
-
-
 # install (remove amd-ucode and replace with intel-ucode if you have intel)
 echo "Installing arch base"
 pacstrap /mnt base linux linux-firmware nano amd-ucode lvm2 networkmanager sudo
@@ -55,11 +45,24 @@ genfstab -U /mnt >> /mnt/etc/fstab
 
 echo "Entering chroot"
 cp ArchInstallerStage2.sh /mnt/ArchInstallerStage2.sh
+cp Settings.sh /mnt/Settings.sh
 arch-chroot /mnt bash /ArchInstallerStage2.sh
 
 echo "Unmounting..."
 umount -a
 
 echo "Rebooting in 5s"
-sleep 5 
+
+sleep 1
+echo 5
+sleep 1
+echo 4
+sleep 1
+echo 3
+sleep 1
+echo 2
+sleep 1
+echo 1
+sleep 1
+
 reboot
